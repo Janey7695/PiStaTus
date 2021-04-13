@@ -7,7 +7,7 @@
 
 void Draw_UI()
 {
-    OLED_ShowStrRAM(10,0,"Temp:",16);
+    OLED_ShowStrRAM(10,0,"Temp:",8);
     Draw_Rect(10,10,110,20,0);
     Draw_Rect(10,23,110,33,0);
     Draw_Rect(10,36,110,46,0);
@@ -16,11 +16,11 @@ void Draw_UI()
 
 void Draw_fillInfo(int temp,int cpu1Usage,int cpu2Usage,int cpu3Usage,int cpu4Usage)
 {
-    OLED_ShowNumRAM(50,0,temp,2,16);
+    OLED_ShowNumRAM(50,0,temp,2,8);
     Draw_Rect(10,10,10+cpu1Usage,20,1);
-    Draw_Rect(10,23,10+cpu2Usage,33,0);
-    Draw_Rect(10,36,10+cpu3Usage,46,0);
-    Draw_Rect(10,49,10+cpu4Usage,59,0);
+    Draw_Rect(10,23,10+cpu2Usage,33,1);
+    Draw_Rect(10,36,10+cpu3Usage,46,1);
+    Draw_Rect(10,49,10+cpu4Usage,59,1);
 }
 
 int main()
