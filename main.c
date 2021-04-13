@@ -1,10 +1,13 @@
 #include "./Oled_driver/oled.h"
 #include "./Oled_driver/draw_api.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 
+const char TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp"
+int GetTemp(void);
 void Draw_UI()
 {
     OLED_ShowStrRAM(10,0,"Temp:",8);
@@ -41,7 +44,7 @@ int main()
         
         CanvasClear();
         Draw_UI();
-        Draw_fillInfo(35+i,6+i,7+2*i,3+i,10-i);
+        Draw_fillInfo(GetTemp,6+i,7+2*i,3+i,10-i);
         DisPlay();
         sleep(1);
         i++;
@@ -50,3 +53,14 @@ int main()
         printf("ok\n");
     }
 }
+
+int GetTemp(void)
+{
+    FILE *fp;
+    char buffer[20];
+    fp = popen(TempFilePathCmd,"r");
+    fgets(buffer,sizeof(buffer),fp);
+    printf("now tempture is %.1f 'C\n",float(atoi(buffer))/1000);
+    pclose(fp);
+    return atoi(buffer)/1000;
+} 
