@@ -6,8 +6,9 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 
-const char TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp"
-int GetTemp(void);
+int temp = 0;
+char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
+void GetTemp(void);
 void Draw_UI()
 {
     OLED_ShowStrRAM(10,0,"Temp:",8);
@@ -44,7 +45,8 @@ int main()
         
         CanvasClear();
         Draw_UI();
-        Draw_fillInfo(GetTemp,6+i,7+2*i,3+i,10-i);
+	GetTemp();
+        Draw_fillInfo(temp/1000,6+i,7+2*i,3+i,10-i);
         DisPlay();
         sleep(1);
         i++;
@@ -54,13 +56,20 @@ int main()
     }
 }
 
-int GetTemp(void)
+void GetTemp(void)
 {
     FILE *fp;
     char buffer[20];
     fp = popen(TempFilePathCmd,"r");
+    if(fp!=NULL)
+    {
     fgets(buffer,sizeof(buffer),fp);
-    printf("now tempture is %.1f 'C\n",float(atoi(buffer))/1000);
+    temp = atoi(buffer);
+    printf("now tempture is %.1f 'C\n",temp/1000.0);
+    }
+    else
+    {
+	    printf("read tempture fail\n");
+    }
     pclose(fp);
-    return atoi(buffer)/1000;
 } 

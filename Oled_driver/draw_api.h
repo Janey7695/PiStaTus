@@ -6,9 +6,9 @@
 #ifndef uchar
 #define uchar unsigned char
 #endif
-#ifndef uint
-#define uint unsigned int
-#endif
+//#ifndef uint
+//#define uint unsigned int
+//#endif
 
 
 extern unsigned char BMP[1024];
