@@ -82,7 +82,7 @@ int main()
         GetCpuUasge();
         Draw_fillInfo(temp/1000,&CpuUsage);
         DisPlay();
-        sleep(1);
+        delay(300);
         i++;
         if(i==10)
             i = 0;
@@ -119,27 +119,32 @@ void GetInfoFromFile(int Ifpri)
     }
     else
     {
+	printf("Open Cpu info file succ\n");
         fgets(buffer,sizeof(buffer),fp);
         if(Ifpri)
         {
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu1.cpuname,CpuUsage.cpu1.cpu_pri_usagetime[0],CpuUsage.cpu1.cpu_pri_usagetime[1],CpuUsage.cpu1.cpu_pri_usagetime[2],CpuUsage.cpu1.cpu_pri_usagetime[3],CpuUsage.cpu1.cpu_pri_usagetime[4],CpuUsage.cpu1.cpu_pri_usagetime[5],CpuUsage.cpu1.cpu_pri_usagetime[6]);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu1.cpuname,&CpuUsage.cpu1.cpu_pri_usagetime[0],&CpuUsage.cpu1.cpu_pri_usagetime[1],&CpuUsage.cpu1.cpu_pri_usagetime[2],&CpuUsage.cpu1.cpu_pri_usagetime[3],&CpuUsage.cpu1.cpu_pri_usagetime[4],&CpuUsage.cpu1.cpu_pri_usagetime[5],&CpuUsage.cpu1.cpu_pri_usagetime[6]);
+	    printf("%d %d %d %d %d %d %d\n",CpuUsage.cpu1.cpu_pri_usagetime[0],CpuUsage.cpu1.cpu_pri_usagetime[1],CpuUsage.cpu1.cpu_pri_usagetime[2],CpuUsage.cpu1.cpu_pri_usagetime[3],CpuUsage.cpu1.cpu_pri_usagetime[4],CpuUsage.cpu1.cpu_pri_usagetime[5],CpuUsage.cpu1.cpu_pri_usagetime[6]);
+            
+	    fgets(buffer,sizeof(buffer),fp);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu2.cpuname,&CpuUsage.cpu2.cpu_pri_usagetime[0],&CpuUsage.cpu2.cpu_pri_usagetime[1],&CpuUsage.cpu2.cpu_pri_usagetime[2],&CpuUsage.cpu2.cpu_pri_usagetime[3],&CpuUsage.cpu2.cpu_pri_usagetime[4],&CpuUsage.cpu2.cpu_pri_usagetime[5],&CpuUsage.cpu2.cpu_pri_usagetime[6]);
+	    printf("%d %d %d %d %d %d %d\n",CpuUsage.cpu2.cpu_pri_usagetime[0],CpuUsage.cpu2.cpu_pri_usagetime[1],CpuUsage.cpu2.cpu_pri_usagetime[2],CpuUsage.cpu2.cpu_pri_usagetime[3],CpuUsage.cpu2.cpu_pri_usagetime[4],CpuUsage.cpu2.cpu_pri_usagetime[5],CpuUsage.cpu2.cpu_pri_usagetime[6]);
             fgets(buffer,sizeof(buffer),fp);
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu2.cpuname,CpuUsage.cpu2.cpu_pri_usagetime[0],CpuUsage.cpu2.cpu_pri_usagetime[1],CpuUsage.cpu2.cpu_pri_usagetime[2],CpuUsage.cpu2.cpu_pri_usagetime[3],CpuUsage.cpu2.cpu_pri_usagetime[4],CpuUsage.cpu2.cpu_pri_usagetime[5],CpuUsage.cpu2.cpu_pri_usagetime[6]);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu3.cpuname,&CpuUsage.cpu3.cpu_pri_usagetime[0],&CpuUsage.cpu3.cpu_pri_usagetime[1],&CpuUsage.cpu3.cpu_pri_usagetime[2],&CpuUsage.cpu3.cpu_pri_usagetime[3],&CpuUsage.cpu3.cpu_pri_usagetime[4],&CpuUsage.cpu3.cpu_pri_usagetime[5],&CpuUsage.cpu3.cpu_pri_usagetime[6]);
             fgets(buffer,sizeof(buffer),fp);
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu3.cpuname,CpuUsage.cpu3.cpu_pri_usagetime[0],CpuUsage.cpu3.cpu_pri_usagetime[1],CpuUsage.cpu3.cpu_pri_usagetime[2],CpuUsage.cpu3.cpu_pri_usagetime[3],CpuUsage.cpu3.cpu_pri_usagetime[4],CpuUsage.cpu3.cpu_pri_usagetime[5],CpuUsage.cpu3.cpu_pri_usagetime[6]);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu4.cpuname,&CpuUsage.cpu4.cpu_pri_usagetime[0],&CpuUsage.cpu4.cpu_pri_usagetime[1],&CpuUsage.cpu4.cpu_pri_usagetime[2],&CpuUsage.cpu4.cpu_pri_usagetime[3],&CpuUsage.cpu4.cpu_pri_usagetime[4],&CpuUsage.cpu4.cpu_pri_usagetime[5],&CpuUsage.cpu4.cpu_pri_usagetime[6]);
             fgets(buffer,sizeof(buffer),fp);
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu4.cpuname,CpuUsage.cpu4.cpu_pri_usagetime[0],CpuUsage.cpu4.cpu_pri_usagetime[1],CpuUsage.cpu4.cpu_pri_usagetime[2],CpuUsage.cpu4.cpu_pri_usagetime[3],CpuUsage.cpu4.cpu_pri_usagetime[4],CpuUsage.cpu4.cpu_pri_usagetime[5],CpuUsage.cpu4.cpu_pri_usagetime[6]);
-            fgets(buffer,sizeof(buffer),fp);
+	    printf("ok?\n");
         }
         else
         {
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu1.cpuname,CpuUsage.cpu1.cpu_atf_usagetime[0],CpuUsage.cpu1.cpu_atf_usagetime[1],CpuUsage.cpu1.cpu_atf_usagetime[2],CpuUsage.cpu1.cpu_atf_usagetime[3],CpuUsage.cpu1.cpu_atf_usagetime[4],CpuUsage.cpu1.cpu_atf_usagetime[5],CpuUsage.cpu1.cpu_atf_usagetime[6]);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu1.cpuname,&CpuUsage.cpu1.cpu_atf_usagetime[0],&CpuUsage.cpu1.cpu_atf_usagetime[1],&CpuUsage.cpu1.cpu_atf_usagetime[2],&CpuUsage.cpu1.cpu_atf_usagetime[3],&CpuUsage.cpu1.cpu_atf_usagetime[4],&CpuUsage.cpu1.cpu_atf_usagetime[5],&CpuUsage.cpu1.cpu_atf_usagetime[6]);
             fgets(buffer,sizeof(buffer),fp);
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu2.cpuname,CpuUsage.cpu2.cpu_atf_usagetime[0],CpuUsage.cpu2.cpu_atf_usagetime[1],CpuUsage.cpu2.cpu_atf_usagetime[2],CpuUsage.cpu2.cpu_atf_usagetime[3],CpuUsage.cpu2.cpu_atf_usagetime[4],CpuUsage.cpu2.cpu_atf_usagetime[5],CpuUsage.cpu2.cpu_atf_usagetime[6]);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu2.cpuname,&CpuUsage.cpu2.cpu_atf_usagetime[0],&CpuUsage.cpu2.cpu_atf_usagetime[1],&CpuUsage.cpu2.cpu_atf_usagetime[2],&CpuUsage.cpu2.cpu_atf_usagetime[3],&CpuUsage.cpu2.cpu_atf_usagetime[4],&CpuUsage.cpu2.cpu_atf_usagetime[5],&CpuUsage.cpu2.cpu_atf_usagetime[6]);
             fgets(buffer,sizeof(buffer),fp);
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu3.cpuname,CpuUsage.cpu3.cpu_atf_usagetime[0],CpuUsage.cpu3.cpu_atf_usagetime[1],CpuUsage.cpu3.cpu_atf_usagetime[2],CpuUsage.cpu3.cpu_atf_usagetime[3],CpuUsage.cpu3.cpu_atf_usagetime[4],CpuUsage.cpu3.cpu_atf_usagetime[5],CpuUsage.cpu3.cpu_atf_usagetime[6]);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu3.cpuname,&CpuUsage.cpu3.cpu_atf_usagetime[0],&CpuUsage.cpu3.cpu_atf_usagetime[1],&CpuUsage.cpu3.cpu_atf_usagetime[2],&CpuUsage.cpu3.cpu_atf_usagetime[3],&CpuUsage.cpu3.cpu_atf_usagetime[4],&CpuUsage.cpu3.cpu_atf_usagetime[5],&CpuUsage.cpu3.cpu_atf_usagetime[6]);
             fgets(buffer,sizeof(buffer),fp);
-            fscanf(fp,"%s %d %d %d %d %d %d %d",CpuUsage.cpu4.cpuname,CpuUsage.cpu4.cpu_atf_usagetime[0],CpuUsage.cpu4.cpu_atf_usagetime[1],CpuUsage.cpu4.cpu_atf_usagetime[2],CpuUsage.cpu4.cpu_atf_usagetime[3],CpuUsage.cpu4.cpu_atf_usagetime[4],CpuUsage.cpu4.cpu_atf_usagetime[5],CpuUsage.cpu4.cpu_atf_usagetime[6]);
+            fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu4.cpuname,&CpuUsage.cpu4.cpu_atf_usagetime[0],&CpuUsage.cpu4.cpu_atf_usagetime[1],&CpuUsage.cpu4.cpu_atf_usagetime[2],&CpuUsage.cpu4.cpu_atf_usagetime[3],&CpuUsage.cpu4.cpu_atf_usagetime[4],&CpuUsage.cpu4.cpu_atf_usagetime[5],&CpuUsage.cpu4.cpu_atf_usagetime[6]);
             fgets(buffer,sizeof(buffer),fp);
         }
     }
@@ -149,32 +154,47 @@ void GetInfoFromFile(int Ifpri)
 void GetCpuUasge()
 {
     int count=0;
-    memset(cpu_1,0,sizeof(cpu_1));
-    memset(cpu_2,0,sizeof(cpu_2));
-    memset(cpu_3,0,sizeof(cpu_3));
-    memset(cpu_4,0,sizeof(cpu_4));
+    printf("begin to clear cpuinfo\n");
+    memset(&cpu_1,0,sizeof(cpu_1));
+    memset(&cpu_2,0,sizeof(cpu_2));
+    memset(&cpu_3,0,sizeof(cpu_3));
+    memset(&cpu_4,0,sizeof(cpu_4));
     GetInfoFromFile(PriTest);
     delay(100);
     GetInfoFromFile(AftTest);
     for(count=0;count<=6;count++)
     {
-        CpuUsage.cpu1.cpu_pri_usagetimeAll = CpuUsage.cpu1.cpu_pri_usagetimeAll + CpuUsage.cpu1.cpu_pri_usagetime[i+1];
-        CpuUsage.cpu1.cpu_aft_usagetimeAll = CpuUsage.cpu1.cpu_aft_usagetimeAll + CpuUsage.cpu1.cpu_atf_usagetime[i+1];
+        CpuUsage.cpu1.cpu_pri_usagetimeAll = CpuUsage.cpu1.cpu_pri_usagetimeAll + CpuUsage.cpu1.cpu_pri_usagetime[count];
+        CpuUsage.cpu1.cpu_aft_usagetimeAll = CpuUsage.cpu1.cpu_aft_usagetimeAll + CpuUsage.cpu1.cpu_atf_usagetime[count];
 
-        CpuUsage.cpu2.cpu_pri_usagetimeAll = CpuUsage.cpu2.cpu_pri_usagetimeAll + CpuUsage.cpu2.cpu_pri_usagetime[i+1];
-        CpuUsage.cpu2.cpu_aft_usagetimeAll = CpuUsage.cpu2.cpu_aft_usagetimeAll + CpuUsage.cpu2.cpu_atf_usagetime[i+1];
+        CpuUsage.cpu2.cpu_pri_usagetimeAll = CpuUsage.cpu2.cpu_pri_usagetimeAll + CpuUsage.cpu2.cpu_pri_usagetime[count];
+        CpuUsage.cpu2.cpu_aft_usagetimeAll = CpuUsage.cpu2.cpu_aft_usagetimeAll + CpuUsage.cpu2.cpu_atf_usagetime[count];
 
-        CpuUsage.cpu3.cpu_pri_usagetimeAll = CpuUsage.cpu3.cpu_pri_usagetimeAll + CpuUsage.cpu3.cpu_pri_usagetime[i+1];
-        CpuUsage.cpu3.cpu_aft_usagetimeAll = CpuUsage.cpu3.cpu_aft_usagetimeAll + CpuUsage.cpu3.cpu_atf_usagetime[i+1];
+        CpuUsage.cpu3.cpu_pri_usagetimeAll = CpuUsage.cpu3.cpu_pri_usagetimeAll + CpuUsage.cpu3.cpu_pri_usagetime[count];
+        CpuUsage.cpu3.cpu_aft_usagetimeAll = CpuUsage.cpu3.cpu_aft_usagetimeAll + CpuUsage.cpu3.cpu_atf_usagetime[count];
 
-        CpuUsage.cpu4.cpu_pri_usagetimeAll = CpuUsage.cpu4.cpu_pri_usagetimeAll + CpuUsage.cpu4.cpu_pri_usagetime[i+1];
-        CpuUsage.cpu4.cpu_aft_usagetimeAll = CpuUsage.cpu4.cpu_aft_usagetimeAll + CpuUsage.cpu4.cpu_atf_usagetime[i+1];
+        CpuUsage.cpu4.cpu_pri_usagetimeAll = CpuUsage.cpu4.cpu_pri_usagetimeAll + CpuUsage.cpu4.cpu_pri_usagetime[count];
+        CpuUsage.cpu4.cpu_aft_usagetimeAll = CpuUsage.cpu4.cpu_aft_usagetimeAll + CpuUsage.cpu4.cpu_atf_usagetime[count];
     }
 
-    CpuUsage.cpu1.cpu_usageRate = 100 - (100*(CpuUsage.cpu1.cpu_atf_usagetime[3]-CpuUsage.cpu1.cpu_pri_usagetime[3])/(CpuUsage.cpu1.cpu_aft_usagetimeAll - CpuUsage.cpu1.cpu_pri_usagetimeAll));
-    CpuUsage.cpu2.cpu_usageRate = 100 - (100*(CpuUsage.cpu2.cpu_atf_usagetime[3]-CpuUsage.cpu2.cpu_pri_usagetime[3])/(CpuUsage.cpu2.cpu_aft_usagetimeAll - CpuUsage.cpu2.cpu_pri_usagetimeAll));
-    CpuUsage.cpu3.cpu_usageRate = 100 - (100*(CpuUsage.cpu3.cpu_atf_usagetime[3]-CpuUsage.cpu3.cpu_pri_usagetime[3])/(CpuUsage.cpu3.cpu_aft_usagetimeAll - CpuUsage.cpu3.cpu_pri_usagetimeAll));
-    CpuUsage.cpu4.cpu_usageRate = 100 - (100*(CpuUsage.cpu4.cpu_atf_usagetime[3]-CpuUsage.cpu4.cpu_pri_usagetime[3])/(CpuUsage.cpu4.cpu_aft_usagetimeAll - CpuUsage.cpu4.cpu_pri_usagetimeAll));
+    CpuUsage.cpu1.cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu1.cpu_atf_usagetime[3]-CpuUsage.cpu1.cpu_pri_usagetime[3])/(CpuUsage.cpu1.cpu_aft_usagetimeAll - CpuUsage.cpu1.cpu_pri_usagetimeAll));
+    CpuUsage.cpu2.cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu2.cpu_atf_usagetime[3]-CpuUsage.cpu2.cpu_pri_usagetime[3])/(CpuUsage.cpu2.cpu_aft_usagetimeAll - CpuUsage.cpu2.cpu_pri_usagetimeAll));
+    CpuUsage.cpu3.cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu3.cpu_atf_usagetime[3]-CpuUsage.cpu3.cpu_pri_usagetime[3])/(CpuUsage.cpu3.cpu_aft_usagetimeAll - CpuUsage.cpu3.cpu_pri_usagetimeAll));
+    CpuUsage.cpu4.cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu4.cpu_atf_usagetime[3]-CpuUsage.cpu4.cpu_pri_usagetime[3])/(CpuUsage.cpu4.cpu_aft_usagetimeAll - CpuUsage.cpu4.cpu_pri_usagetimeAll));
 
-    
+    printf("%d %d %d %d \n",CpuUsage.cpu1.cpu_usageRate,CpuUsage.cpu2.cpu_usageRate,CpuUsage.cpu3.cpu_usageRate,CpuUsage.cpu4.cpu_usageRate);
+
+    CpuUsage.cpu1.cpu_pri_usagetimeAll = 0;
+        CpuUsage.cpu1.cpu_aft_usagetimeAll = 0;
+
+	    CpuUsage.cpu2.cpu_pri_usagetimeAll = 0;
+	        CpuUsage.cpu2.cpu_aft_usagetimeAll = 0;
+
+		    CpuUsage.cpu3.cpu_pri_usagetimeAll = 0;
+		        CpuUsage.cpu3.cpu_aft_usagetimeAll = 0;
+
+			    CpuUsage.cpu4.cpu_pri_usagetimeAll = 0;
+			        CpuUsage.cpu4.cpu_aft_usagetimeAll = 0;
+
+   
 }
