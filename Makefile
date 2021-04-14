@@ -1,8 +1,8 @@
-main:main.o oled.o draw_api.o
-	gcc -o main main.o oled.o draw_api.o -lwiringPi -lm
+PiStaTus:PiStaTus.o oled.o draw_api.o
+	gcc -o PiStaTus PiStaTus.o oled.o draw_api.o -lwiringPi -lm
 
-main.o:main.c
-	gcc -c main.c
+PiStaTus.o:PiStaTus.c
+	gcc -c PiStaTus.c
 
 oled.o:./Oled_driver/oled.c
 	gcc -c ./Oled_driver/oled.c
