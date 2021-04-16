@@ -9,11 +9,11 @@
 
 #define PriTest 1
 #define AftTest 0
-#define UsageRectBeigin_x 10
-#define UsageRectBeigin_y 10
-#define UsageRectWidth 10
-#define UsageRectLength 100
-#define UsageRectInter 3
+#define UsageRectBeigin_x 1
+#define UsageRectBeigin_y 35
+#define UsageRectWidth 5
+#define UsageRectLength 80
+#define UsageRectInter 2
 
 typedef struct cpu_n
 {
@@ -208,11 +208,12 @@ void GetCpuUasge()
 
             // CpuUsage.cpu4.cpu_pri_usagetimeAll = CpuUsage.cpu4.cpu_pri_usagetimeAll + CpuUsage.cpu4.cpu_pri_usagetime[count];
             // CpuUsage.cpu4.cpu_aft_usagetimeAll = CpuUsage.cpu4.cpu_aft_usagetimeAll + CpuUsage.cpu4.cpu_atf_usagetime[count];
-            CpuUsage.cpu[countCpuNum].cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3]-CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3])/(CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll - CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll));
+	}
+	    CpuUsage.cpu[countCpuNum].cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3]-CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3])/(CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll - CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll));
             CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll = 0;
             CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll = 0;
         
-        }
+        
     }
 
     // CpuUsage.cpu[countCpuNum].cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3]-CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3])/(CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll - CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll));
