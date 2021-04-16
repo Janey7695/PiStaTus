@@ -3,6 +3,9 @@
 #include "oled.h"
 #include <math.h>
 
+#define uint unsigned int
+#define uchar unsigned char
+
 dpi_dw OledDraw;
 dpi_sw OledShow;
 dpi_cav OledCanvas;
@@ -194,8 +197,8 @@ void Draw_Picture(uchar x,uchar y,uchar picture_Length,uchar picture_width,const
 	for(j=y_page;j<y_page+y_page_need+1;j++)
 		for(i=x;i<x+picture_Length;i++)
 		{
-			BMP[x+y_page*128]|=(Img[picAryCut]>>pic_y_delta);
-			BMP[x+(y_page+1)*128]|=(Img[picAryCut++]<<(8-pic_y_delta));
+			BMP[i+j*128]|=(Img[picAryCut]>>pic_y_delta);
+			BMP[i+(j+1)*128]|=(Img[picAryCut++]<<(8-pic_y_delta));
 		}
 }
 
@@ -224,19 +227,19 @@ void OLED_ShowCharRAM(uchar x,uchar y,uchar CHAR,uchar fontsize){
 	}
 }
 
-//Íù»º´æÀïÃæÐ´Èë×Ö·û´®
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
 void OLED_ShowStrRAM(uchar x,uchar y,uchar*chr,uchar fontsize){
 	uchar j=0,spacing;
 	
 	if(fontsize==16) spacing=8;
-	else spacing=6; //ÉèÖÃ×Ö¼ä¾à
+	else spacing=6; //ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½
 	
 	while(chr[j]!='\0')
 	{
 		OLED_ShowCharRAM(x,y,chr[j],fontsize);
-		x+=spacing; //ÉèÖÃ×Ö¼ä¾àÎªspacing
+		x+=spacing; //ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½Îªspacing
 		
-		if(x>120)//³¬³öÆÁÄ»×Ô¶¯ÇÐÐÐ
+		if(x>120)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			x=0;
 			y+=2;
@@ -251,12 +254,12 @@ long int oled_pow(unsigned char m,unsigned char n)
 	while(n--)result*=m;    
 	return result;
 }				  
-//ÏÔÊ¾2¸öÊý×Ö
-//x,y :Æðµã×ø±ê	 
-//len :Êý×ÖµÄÎ»Êý
-//size:×ÖÌå´óÐ¡
-//mode:Ä£Ê½	0,Ìî³äÄ£Ê½;1,µþ¼ÓÄ£Ê½
-//num:ÊýÖµ(0~4294967295);	 		  
+//ï¿½ï¿½Ê¾2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//x,y :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	 
+//len :ï¿½ï¿½ï¿½Öµï¿½Î»ï¿½ï¿½
+//size:ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
+//mode:Ä£Ê½	0,ï¿½ï¿½ï¿½Ä£Ê½;1,ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+//num:ï¿½ï¿½Öµ(0~4294967295);	 		  
 void OLED_ShowNumRAM(unsigned char x,unsigned char y,long int num,unsigned char len,unsigned char size)
 {         	
 	unsigned char t,temp;

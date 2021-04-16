@@ -4,13 +4,6 @@
 
 
 
-#ifndef uchar
-#define uchar  unsigned char
-#endif
-#ifndef uint
-#define uint unsigned int
-#endif
-
 typedef struct 
 {
     void (*Point)(unsigned char x,unsigned char y);
@@ -46,17 +39,17 @@ extern dpi_funcstr OledPaint;
 
 
 extern unsigned char BMP[1024];
-void Draw_Point(unsigned char x,unsigned char y);//»æÖÆµ¥¸öµã
-void Draw_Line(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2);//»æÖÆÒ»ÌõÖ±Ïß£¬ÆäÖĞx1<x2¡£
-void Draw_Rect(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char Full);//»æÖÆÒ»¸ö¾ØĞÎ£¬(x1,y1)ÊÇ×óÉÏ½Ç×ø±ê£¬ÁíÒ»¸öÊÇÓÒÏÂ½Ç×ø±ê£¬Full=1ÎªÌî³äÄ£Ê½£¬=0Îª²»Ìî³ä
-void Draw_Tri(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char x3,unsigned char y3);//»æÖÆÒ»¸öÈı½ÇĞÎ
-void Draw_Circle(unsigned char x,unsigned char y,unsigned char r);//»æÖÆÒ»¸öÔ²
+void Draw_Point(unsigned char x,unsigned char y);//ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½
+void Draw_Line(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2);//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ö±ï¿½ß£ï¿½ï¿½ï¿½ï¿½ï¿½x1<x2ï¿½ï¿½
+void Draw_Rect(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char Full);//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Î£ï¿½(x1,y1)ï¿½ï¿½ï¿½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ê£¬ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½ê£¬Full=1Îªï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½=0Îªï¿½ï¿½ï¿½ï¿½ï¿½
+void Draw_Tri(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char x3,unsigned char y3);//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+void Draw_Circle(unsigned char x,unsigned char y,unsigned char r);//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ô²
 void OLED_ShowCharRAM(unsigned char x,unsigned char y,unsigned char CHAR,unsigned char fontsize);
 void OLED_ShowStrRAM(unsigned char x,unsigned char y,unsigned char*chr,unsigned char fontsize);
 void OLED_ShowNumRAM(unsigned char x,unsigned char y,long int num,unsigned char len,unsigned char size);
-void Draw_Picture(uchar x,uchar y,uchar picture_Length,uchar picture_width,const unsigned char* Img);
-void DisPlay(void);//ÏÔÊ¾»æÖÆµÄÍ¼Ïñ
-void CanvasClear(void);//Çå¿Õ»­²¼
+void Draw_Picture(unsigned char x,unsigned char y,unsigned char picture_Length,unsigned char picture_width,const unsigned char* Img);
+void DisPlay(void);//ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Æµï¿½Í¼ï¿½ï¿½
+void CanvasClear(void);//ï¿½ï¿½Õ»ï¿½ï¿½ï¿½
 void Oled_DrawApi_Init(void);
 
 #endif

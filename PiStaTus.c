@@ -1,5 +1,6 @@
 #include "./Oled_driver/oled.h"
 #include "./Oled_driver/draw_api.h"
+#include "./Oled_driver/img.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -43,7 +44,8 @@ void GetCpuUasge(void);
 
 void Draw_UI()
 {
-    OledPaint.Show.Str(10,0,"Temp:",8);
+    
+    OledPaint.Draw.Picture(0,0,38,28,cpu_temp_img);
     for(int i=0;i<4;i++)
     {
         OledPaint.Draw.Rect(UsageRectBeigin_x,UsageRectBeigin_y+(UsageRectWidth+UsageRectInter)*i,UsageRectBeigin_x+UsageRectLength,UsageRectWidth+UsageRectBeigin_y+(UsageRectWidth+UsageRectInter)*i,0);
@@ -54,7 +56,7 @@ void Draw_fillInfo(int temp,cpu_all* CpuUsAge)
 {
     float usgRate=0.0;
     int usgRateLen =0;
-    OledPaint.Show.Number(42,0,temp,2,8);
+    OledPaint.Show.Number(42,0,temp,2,16);
     for(int countCpuNum=0;countCpuNum<4;countCpuNum++)
     {
         usgRate = CpuUsAge->cpu[countCpuNum].cpu_usageRate/100.0;
@@ -76,7 +78,7 @@ int main()
     {
         printf("wiring init succeed\n");
     }
-    OLED_Init();
+    Oled_DrawApi_Init();
     CpuUsage.cpu[0] = cpu_1;
     CpuUsage.cpu[1] = cpu_2;
     CpuUsage.cpu[2] = cpu_3;
