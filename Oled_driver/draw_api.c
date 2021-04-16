@@ -1,7 +1,12 @@
 #include "draw_api.h"
+#include "oledfont2.h"
 #include "oled.h"
 #include <math.h>
-#include "oledfont2.h"
+
+dpi_dw OledDraw;
+dpi_sw OledShow;
+dpi_cav OledCanvas;
+dpi_funcstr OledPaint;
 
 unsigned char BMP[1024]={
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -106,12 +111,7 @@ void Draw_Point(uchar x,uchar y){
 	uchar page,i;
 	page=y/8;
 	i=y%8;
-//	if(x==0)
-//	BMP[page*8*16+127]|=(0x01<<i);
-//	else
-//	{
-		BMP[page*8*16+x]|=(0x01<<i);
-//	}
+	BMP[page*8*16+x]|=(0x01<<i);
 }
 
 void Draw_Line(uchar x1,uchar y1,uchar x2,uchar y2){
@@ -180,6 +180,23 @@ void Draw_Circle(uchar x,uchar y,uchar r){
 		Draw_Point(x+(uchar)dx,y-(uchar)dy);
 		Draw_Point(x-(uchar)dx,y+(uchar)dy);
 	}
+}
+
+void Draw_Picture(uchar x,uchar y,uchar picture_Length,uchar picture_width,const unsigned char* Img)
+{
+	uchar dy,y_page,i,j,y_page_need,pic_y_delta;
+	int picAryLen=0,picAryCut;
+	y_page = y/8;
+	y_page_need = picture_width/8;
+	pic_y_delta = y%8;
+	picAryLen = (y_page_need+1)*picture_Length;
+	picAryCut = 0;
+	for(j=y_page;j<y_page+y_page_need+1;j++)
+		for(i=x;i<x+picture_Length;i++)
+		{
+			BMP[x+y_page*128]|=(Img[picAryCut]>>pic_y_delta);
+			BMP[x+(y_page+1)*128]|=(Img[picAryCut++]<<(8-pic_y_delta));
+		}
 }
 
 
@@ -251,20 +268,44 @@ void OLED_ShowNumRAM(unsigned char x,unsigned char y,long int num,unsigned char 
 		{
 			if(temp==0)
 			{
-//				OLED_ShowChar(x+(size/2)*t,y,' ');
 				OLED_ShowCharRAM(x+(size/2)*t,y,' ',size);
 				continue;
 			}else enshow=1; 
 		}
 		OLED_ShowCharRAM(x+(size/2)*t,y,temp+'0',size);
-//	 	OLED_ShowChar(x+(size/2)*t,y,temp+'0'); 
 	}
 }
-
 
 void DisPlay(void){
 	OLED_DrawBMP(0,0,128,8,BMP);
 }
+
+void Oled_DrawApi_Init()
+{
+	OLED_Init();
+	
+	OledDraw.Point = Draw_Point;
+	OledDraw.Line = Draw_Line;
+	OledDraw.Circle = Draw_Circle;
+	OledDraw.Tri = Draw_Tri;
+	OledDraw.Rect = Draw_Rect;
+	OledDraw.Picture = Draw_Picture;
+
+	OledShow.Char = OLED_ShowCharRAM;
+	OledShow.Str = OLED_ShowStrRAM;
+	OledShow.Number = OLED_ShowNumRAM;
+
+	OledCanvas.Display = DisPlay;
+	OledCanvas.Clear = CanvasClear;
+
+	OledPaint.Draw = OledDraw;
+	OledPaint.Show = OledShow;
+	OledPaint.Canvas = OledCanvas;
+	
+	
+	
+}
+
 
 
 
