@@ -19,7 +19,10 @@
 #define LineChartWidth 27
 #define LineChartBegin_x 85
 #define LineChartBegin_y 35
-
+#define MemLineChartLength 40
+#define MemLineChartWidth 27
+#define MemLineChartBegin_x 85
+#define MemLineChartBegin_y 0
 
 typedef struct cpu_n
 {
@@ -36,19 +39,34 @@ typedef struct cpu_a
     cpu_usage cpu[5];
 }cpu_all;
 
+typedef struct mem_a
+{
+    int mem_total;
+    int mem_free;
+    int mem_buffer;
+    int mem_cached;
+    int mem_usage;
+    char trash[100];
+}mem_all;
+
 cpu_usage cpu_1,cpu_2,cpu_3,cpu_4,cpu_Al;
 cpu_all CpuUsage;
+mem_all MemUsage;
 int temp = 0;
 char cpuAllUsageLineChartDat[LineChartLength];
+char memAllUsageLineChartDat[MemLineChartLength];
 char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
 char* CpuInfoPath = "/proc/stat";
+char* MemInfoPath = "/proc/meminfo";
 
 void GetTemp(void);
 void GetCpuUasge(void);
+void GetMemUsage(void);
 
 
 void Draw_UI()
 {
+    OledPaint.Draw.Rect(MemLineChartBegin_x,MemLineChartBegin_y,MemLineChartBegin_x+MemLineChartLength,MemLineChartBegin_y+MemLineChartWidth,0);
     OledPaint.Draw.Rect(LineChartBegin_x,LineChartBegin_y,LineChartBegin_x+LineChartLength,LineChartBegin_y+LineChartWidth,0);
     OledPaint.Draw.Picture(0,0,38,28,cpu_temp_img);
     for(int i=0;i<4;i++)
@@ -69,6 +87,18 @@ void updateLineCHartDat(cpu_all* CpuUsAge)
     cpuAllUsageLineChartDat[LineChartLength-1] = usgRate*LineChartWidth;
 }
 
+void updateMemLineCHartDat(mem_all* MemUsAge)
+{
+    float usgRate=0.0;
+    int usgRateLen =0;
+    usgRate = MemUsAge->mem_usage/100.0;
+    for(int count =0;count<MemLineChartLength-1;count++)
+    {
+        memAllUsageLineChartDat[count] = memAllUsageLineChartDat[count+1];
+    }
+    memAllUsageLineChartDat[MemLineChartLength-1] = usgRate*MemLineChartWidth;
+}
+
 void Draw_fillInfo(int temp,cpu_all* CpuUsAge)
 {
     float usgRate=0.0;
@@ -83,8 +113,12 @@ void Draw_fillInfo(int temp,cpu_all* CpuUsAge)
     updateLineCHartDat(&CpuUsage);
     for(int countPointNumb =0;countPointNumb<LineChartLength-1;countPointNumb++)
     {
-        // OledPaint.Draw.Point(countPointNumb+LineChartBegin_x,LineChartBegin_y+LineChartWidth-cpuAllUsageLineChartDat[countPointNumb]);
         OledPaint.Draw.Line(countPointNumb+LineChartBegin_x,LineChartBegin_y+LineChartWidth-cpuAllUsageLineChartDat[countPointNumb],countPointNumb+LineChartBegin_x+1,LineChartBegin_y+LineChartWidth-cpuAllUsageLineChartDat[countPointNumb+1]);
+    }
+    updateMemLineCHartDat(&MemUsage);
+    for(int countPointNumb =0;countPointNumb<LineChartLength-1;countPointNumb++)
+    {
+        OledPaint.Draw.Line(countPointNumb+MemLineChartBegin_x,MemLineChartBegin_y+MemLineChartWidth-memAllUsageLineChartDat[countPointNumb],countPointNumb+MemLineChartBegin_x+1,MemLineChartBegin_y+MemLineChartWidth-memAllUsageLineChartDat[countPointNumb+1]);
     }
     
 }
@@ -107,7 +141,9 @@ int main()
     CpuUsage.cpu[3] = cpu_3;
     CpuUsage.cpu[4] = cpu_4;
     CpuUsage.cpu[0] = cpu_Al;
+    memset(&MemUsage,0,sizeof(MemUsage));
     memset(&cpuAllUsageLineChartDat,0,sizeof(cpuAllUsageLineChartDat));
+    memset(&memAllUsageLineChartDat,0,sizeof(memAllUsageLineChartDat));
     while(1)
     {
         
@@ -115,6 +151,7 @@ int main()
         Draw_UI();
         GetTemp();
         GetCpuUasge();
+        GetMemUsage();
         Draw_fillInfo(temp/1000,&CpuUsage);
         DisPlay();
         delay(300);
@@ -153,7 +190,6 @@ void GetInfoFromFile(int Ifpri)
     else
     {
         printf("Open Cpu info file succ\n");
-        // fgets(buffer,sizeof(buffer),fp); //move fileptr to second line 
         if(Ifpri)
         {
             for(int countCpuNum=0;countCpuNum<5;countCpuNum++)
@@ -209,4 +245,31 @@ void GetCpuUasge()
 
     printf("cpu:%d cpu1:%d cpu2:%d cpu3:%d cpu4:%d \n",CpuUsage.cpu[0].cpu_usageRate,CpuUsage.cpu[1].cpu_usageRate,CpuUsage.cpu[2].cpu_usageRate,CpuUsage.cpu[3].cpu_usageRate,CpuUsage.cpu[4].cpu_usageRate);
 
+}
+
+void GetMemUsage()
+{
+    FILE *fp;
+    char buffer[100];
+    fp = fopen(MemInfoPath,"r");
+    if(fp == NULL)
+    {
+        printf("Open Mem info file fail\n");
+        exit(1);
+    }
+    else
+    {
+
+        printf("Open Cpu info file succ\n");
+        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_total,&MemUsage.trash);
+        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_free,&MemUsage.trash);
+        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_buffer,&MemUsage.trash);
+        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_buffer,&MemUsage.trash);
+        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_cached,&MemUsage.trash);
+        MemUsage.mem_usage = 100 - (100*1.0*(MemUsage.mem_free+MemUsage.mem_buffer+MemUsage.mem_cached)/MemUsage.mem_total);
+        printf("total:%d free:%d buffers:%d cached:%d usagerate:%d\n",MemUsage.mem_total,MemUsage.mem_free,MemUsage.mem_buffer,MemUsage.mem_cached,MemUsage.mem_usage);
+
+    }
+
+    fclose(fp);
 }
