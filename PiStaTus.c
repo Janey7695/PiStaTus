@@ -8,6 +8,7 @@
 #include <wiringPiSPI.h>
 #include <string.h>
 
+
 #define PriTest 1
 #define AftTest 0
 #define UsageRectBeigin_x 1
@@ -52,7 +53,7 @@ typedef struct mem_a
 cpu_usage cpu_1,cpu_2,cpu_3,cpu_4,cpu_Al;
 cpu_all CpuUsage;
 mem_all MemUsage;
-int temp = 0;
+char temp[4];
 char cpuAllUsageLineChartDat[LineChartLength];
 char memAllUsageLineChartDat[MemLineChartLength];
 char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
@@ -99,11 +100,11 @@ void updateMemLineCHartDat(mem_all* MemUsAge)
     memAllUsageLineChartDat[MemLineChartLength-1] = usgRate*MemLineChartWidth;
 }
 
-void Draw_fillInfo(int temp,cpu_all* CpuUsAge)
+void Draw_fillInfo(char *temp,cpu_all* CpuUsAge)
 {
     float usgRate=0.0;
     int usgRateLen =0;
-    OledPaint.Show.Number(42,0,temp,2,16);
+    OledPaint.Show.Str(42,0,temp,16);
     for(int countCpuNum=0;countCpuNum<4;countCpuNum++)
     {
         usgRate = CpuUsAge->cpu[countCpuNum+1].cpu_usageRate/100.0;
@@ -152,7 +153,7 @@ int main()
         GetTemp();
         GetCpuUasge();
         GetMemUsage();
-        Draw_fillInfo(temp/1000,&CpuUsage);
+        Draw_fillInfo(temp,&CpuUsage);
         DisPlay();
         delay(300);
         printf("ok\n");
@@ -166,9 +167,13 @@ void GetTemp(void)
     fp = popen(TempFilePathCmd,"r");
     if(fp!=NULL)
     {
+        float temp2;
+        int temp1;
         fgets(buffer,sizeof(buffer),fp);
-        temp = atoi(buffer);
-        printf("now tempture is %.1f 'C\n",temp/1000.0);
+        temp1 = atoi(buffer);
+        temp2 = temp1/1000.0;
+        sprintf(temp,"%.1f",temp2);
+        printf("now tempture is %s 'C\n",temp);
     }
     else
     {
