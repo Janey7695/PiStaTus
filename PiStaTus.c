@@ -8,7 +8,7 @@
 #include <wiringPiSPI.h>
 #include <string.h>
 
-
+#define Version "1.0.0"
 #define PriTest 1
 #define AftTest 0
 #define UsageRectBeigin_x 1
