@@ -1,0 +1,13 @@
+[Unit]
+Description=frpc service
+After=network.target syslog.target
+Wants=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/home/pi/Program/PiStaTus/PiStaTus
+
+[Install]
+WantedBy=multi-user.target
