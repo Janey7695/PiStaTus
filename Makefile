@@ -12,5 +12,5 @@ draw_api.o:./Oled_driver/draw_api.c ./Oled_driver/oled.c
 	@echo "Build oled api"
 
 clean:
-	rm -f *.o
+	rm -f *.o PiStaTus
 

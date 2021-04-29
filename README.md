@@ -32,7 +32,8 @@ CS - > GPIO. 0(BCM编号为17)<br>
 
 
 ## 使用
-1. OLED使用`SPI`通信，依赖`wiringPi  -version 2.52`,树莓派本身自带`wiringPi -version 2.50` 需要升级至2.52版本（<a href="http://wiringpi.com/wiringpi-updated-to-2-52-for-the-raspberry-pi-4b/">详见原作者文章</a>）
+### 使用前更新
+OLED使用`SPI`通信，依赖`wiringPi  -version 2.52`,树莓派本身自带`wiringPi -version 2.50` 需要升级至2.52版本（<a href="http://wiringpi.com/wiringpi-updated-to-2-52-for-the-raspberry-pi-4b/">详见原作者文章</a>）
 ~~~shell
 cd /tmp
 wget https://project-downloads.drogon.net/wiringpi-latest.deb
@@ -43,15 +44,45 @@ sudo dpkg -i wiringpi-latest.deb
 gpio -v
 ~~~
 查看版本是否为2.52。
-
-2. 获取`PiStaTus`
+### 从源码获取
+1. 获取`PiStaTus`
 ~~~shell
-cd ~/
+cd mnt
 git clone https://github.com/Janey7695/PiStaTus.git
+~~~
+2. 编译`PiStaTus`
+~~~shell
 cd PiStaTus/
+make
+~~~
+会有如下输出：
+~~~shell
+Build dep PiStaTus.o successfully
+Build oled base driver
+Build oled api
+/usr/bin/ld: 当搜索用于 /usr/lib/gcc/aarch64-linux-gnu/8/../../../../lib/libwiringPi.so 时跳过不兼容的 -lwiringPi 
+/usr/bin/ld: 当搜索用于 /lib/../lib/libwiringPi.so 时跳过不兼容的 -lwiringPi 
+/usr/bin/ld: 当搜索用于 /usr/lib/../lib/libwiringPi.so 时跳过不兼容的 -lwiringPi 
+/usr/bin/ld: 当搜索用于 /usr/lib/gcc/aarch64-linux-gnu/8/../../../libwiringPi.so 时跳过不兼容的 -lwiringPi 
+Build PiStaTus successfully
 ~~~
 3. `PiStaTus`初始化
 ~~~shell
+sudo ./PiStatusInit
+~~~
+初始化会设置`PiStaTus`为开机自启动，执行完这步后oled屏幕应该就有显示东西了，`PiStaTus`安装完成。
+### 从Release中获取
+1. 获取`PiStaTus`
+* 直接在Release中下载任意版本的`PiStaTus`，并将下载的文件`PiStaTus.tar.gz`解压至`~/mnt`目录中
+* 或通过指令获取
+~~~shell
+cd mnt
+sudo wget https://github.com/Janey7695/PiStaTus/releases/download/V_1.0.0/PiStaTus.tar.gz
+sudo tar -zxvf ./PiStaTus.tar.gz
+~~~
+2. `PiStaTus`初始化
+~~~shell
+cd PiStaTus/
 sudo ./PiStatusInit
 ~~~
 初始化会设置`PiStaTus`为开机自启动，执行完这步后oled屏幕应该就有显示东西了，`PiStaTus`安装完成。
