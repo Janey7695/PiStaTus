@@ -73,7 +73,7 @@ sudo ./PiStatusInit
 初始化会设置`PiStaTus`为开机自启动，执行完这步后oled屏幕应该就有显示东西了，`PiStaTus`安装完成。
 ### 从Release中获取
 1. 获取`PiStaTus`
-* 直接在Release中下载任意版本的`PiStaTus`，并将下载的文件`PiStaTus.tar.gz`解压至`~/mnt`目录中
+* 直接在Release中下载任意版本的`PiStaTus`，并将下载的文件`PiStaTus.tar.gz`解压至`/mnt`目录中
 * 或通过指令获取
 ~~~shell
 cd mnt
