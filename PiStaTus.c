@@ -162,6 +162,7 @@ int main()
     {
         
         CanvasClear();
+	IpAddressInit();
         Draw_UI();
         GetTemp();
         GetCpuUasge();

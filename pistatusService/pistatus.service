@@ -1,5 +1,5 @@
 [Unit]
-Description=frpc service
+Description=pistatus service
 After=network.target syslog.target
 Wants=network.target
 
