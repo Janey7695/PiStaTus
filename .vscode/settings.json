@@ -4,6 +4,7 @@
         "*.cjson": "jsonc",
         "*.wxss": "css",
         "*.wxs": "javascript",
-        "draw_api.h": "c"
+        "draw_api.h": "c",
+        "stdlib.h": "c"
     }
 }

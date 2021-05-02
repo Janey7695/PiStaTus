@@ -52,7 +52,7 @@ void DisPlay(void);//��ʾ���Ƶ�ͼ��
 void CanvasClear(void);//��ջ���
 void Oled_DrawApi_Init(void);
 void IPText_WriteString(unsigned char *text,unsigned char*chr,unsigned char fontsize);
-void Draw_PicPart(unsigned char begin_x,unsigned char newpic,unsigned char *pic);
+void Draw_PicPart(unsigned char begin_x,unsigned char *newpic,unsigned char *pic);
 
 #endif
 

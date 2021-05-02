@@ -296,14 +296,14 @@ void IPText_WriteChar(unsigned char *text,unsigned char x,unsigned char y,unsign
 		y+=1;
 		for(i=0;i<8;i++)
 		{
-			text[y*32+x+i]=CHAR16x8[j*16+i+8];
+			text[y*120+x+i]=CHAR16x8[j*16+i+8];
 		}
 	}
 	else
 	{
 		for(i=0;i<6;i++)
 		{
-			text[y*32+x+i]=CHAR8x6[j][i];
+			text[y*120+x+i]=CHAR8x6[j][i];
 		}
 	}
 }
@@ -319,33 +319,33 @@ void IPText_WriteString(unsigned char *text,unsigned char*chr,unsigned char font
 		IPText_WriteChar(text,x,y,chr[j],fontsize);
 		x+=spacing;
 		j++;
-        if(x>=32)
+        if(x>104)
         {
-            x=0;
-            y++;
+            IPText_WriteChar(text,x-8,y,' ',fontsize);
         }
-        if(y>1)
-            break;
+		if(x>=120)
+		{
+			break;
+		}
 	}
 }
 
 int sque(int input)
 {
-	if(input>=32)
+	if(input>=120)
 	{
-		return input-32;
+		return input-120;
 	}
 	else
 		return input;
 }
 
-void Draw_PicPart(unsigned char begin_x,unsigned char newpic,unsigned char *pic)
+void Draw_PicPart(unsigned char begin_x,unsigned char *newpic,unsigned char *pic)
 {
 	for(int i=0;i<32;i++)
 	{
-		if(begin_x+i=32)
 		newpic[i] = pic[sque(begin_x+i)];
-		newpic[i+32] = pic[sque(begin_x+i+32)];
+		newpic[i+32] = pic[sque(begin_x+i)+120];
 	}
 }
 

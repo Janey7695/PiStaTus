@@ -7,9 +7,8 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <string.h>
-#include "oledfont2.h"
 
-#define Version "1.0.0"
+#define Version "1.1.0"
 #define PriTest 1
 #define AftTest 0
 #define UsageRectBeigin_x 1
@@ -57,8 +56,9 @@ mem_all MemUsage;
 char temp[4];
 char cpuAllUsageLineChartDat[LineChartLength];
 char memAllUsageLineChartDat[MemLineChartLength];
-unsigned char IpnetText[104];
+unsigned char IpnetText[120*2];
 unsigned char IpnetToShow[64];
+int jindutiao = 0;
 char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
 char* CpuInfoPath = "/proc/stat";
 char* MemInfoPath = "/proc/meminfo";
@@ -110,9 +110,13 @@ void Draw_fillInfo(char *temp,cpu_all* CpuUsAge)
 {
     float usgRate=0.0;
     int usgRateLen =0;
+    
     OledPaint.Show.Str(42,0,temp,16);
-    Draw_PicPart(20,IpnetToShow,IpnetText);
-    OledPaint.Draw.Picture(42,8,32,16,IpnetToShow);
+    Draw_PicPart(jindutiao,IpnetToShow,IpnetText);
+    jindutiao+=8;
+    if(jindutiao>=120)
+    jindutiao=0;
+    OledPaint.Draw.Picture(42,16,32,16,IpnetToShow);
     for(int countCpuNum=0;countCpuNum<4;countCpuNum++)
     {
         usgRate = CpuUsAge->cpu[countCpuNum+1].cpu_usageRate/100.0;
