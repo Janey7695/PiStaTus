@@ -111,6 +111,7 @@ void Draw_fillInfo(char *temp,cpu_all* CpuUsAge)
     float usgRate=0.0;
     int usgRateLen =0;
     OledPaint.Show.Str(42,0,temp,16);
+    Draw_PicPart(20,IpnetToShow,IpnetText);
     OledPaint.Draw.Picture(42,8,32,16,IpnetToShow);
     for(int countCpuNum=0;countCpuNum<4;countCpuNum++)
     {
@@ -303,6 +304,6 @@ void IpAddressInit()
         sprintf(ipAddress,"Wifi Disonnect now");
     }
     printf("ip address is:%s\n",ipAddress);
-    IPText_WriteString(IpnetToShow,ipAddress,8);
+    IPText_WriteString(IpnetText,ipAddress,16);
     pclose(fp);
 }

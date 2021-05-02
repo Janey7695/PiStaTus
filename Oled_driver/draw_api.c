@@ -303,7 +303,7 @@ void IPText_WriteChar(unsigned char *text,unsigned char x,unsigned char y,unsign
 	{
 		for(i=0;i<6;i++)
 		{
-			text[x+i]=CHAR8x6[j][i];
+			text[y*32+x+i]=CHAR8x6[j][i];
 		}
 	}
 }
@@ -326,6 +326,26 @@ void IPText_WriteString(unsigned char *text,unsigned char*chr,unsigned char font
         }
         if(y>1)
             break;
+	}
+}
+
+int sque(int input)
+{
+	if(input>=32)
+	{
+		return input-32;
+	}
+	else
+		return input;
+}
+
+void Draw_PicPart(unsigned char begin_x,unsigned char newpic,unsigned char *pic)
+{
+	for(int i=0;i<32;i++)
+	{
+		if(begin_x+i=32)
+		newpic[i] = pic[sque(begin_x+i)];
+		newpic[i+32] = pic[sque(begin_x+i+32)];
 	}
 }
 
