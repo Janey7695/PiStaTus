@@ -56,13 +56,18 @@ mem_all MemUsage;
 char temp[4];
 char cpuAllUsageLineChartDat[LineChartLength];
 char memAllUsageLineChartDat[MemLineChartLength];
+unsigned char IpnetText[104];
+unsigned char IpnetToShow[32];
 char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
 char* CpuInfoPath = "/proc/stat";
 char* MemInfoPath = "/proc/meminfo";
+char* IpCmd = "ip a";
 
 void GetTemp(void);
 void GetCpuUasge(void);
 void GetMemUsage(void);
+void IpAddressInit(void);
+void GetIpAddress(void);
 
 
 void Draw_UI()
@@ -105,6 +110,7 @@ void Draw_fillInfo(char *temp,cpu_all* CpuUsAge)
     float usgRate=0.0;
     int usgRateLen =0;
     OledPaint.Show.Str(42,0,temp,16);
+    OledPaint.Draw.Picture(42,8,32,8,IpnetToShow);
     for(int countCpuNum=0;countCpuNum<4;countCpuNum++)
     {
         usgRate = CpuUsAge->cpu[countCpuNum+1].cpu_usageRate/100.0;
@@ -137,6 +143,7 @@ int main()
         printf("wiring init succeed\n");
     }
     Oled_DrawApi_Init();
+    IpAddressInit();
     CpuUsage.cpu[1] = cpu_1;
     CpuUsage.cpu[2] = cpu_2;
     CpuUsage.cpu[3] = cpu_3;
@@ -277,4 +284,18 @@ void GetMemUsage()
     }
 
     fclose(fp);
+}
+
+void IpAddressInit()
+{
+    FILE *fp;
+    char buffer[200],ipAddress[20];
+    fp = popen(IpCmd,"r");
+    for(int i=0;i<10;i++)
+    {
+        fgets(buffer,sizeof(buffer),fp);
+    }
+    fscanf(fp,"%s %s",&buffer,&ipAddress);
+    printf("ip address is:%s\n",ipAddress);
+    pclose(fp);
 }
