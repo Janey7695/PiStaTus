@@ -7,6 +7,7 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <string.h>
+#include "oledfont2.h"
 
 #define Version "1.0.0"
 #define PriTest 1
@@ -57,7 +58,7 @@ char temp[4];
 char cpuAllUsageLineChartDat[LineChartLength];
 char memAllUsageLineChartDat[MemLineChartLength];
 unsigned char IpnetText[104];
-unsigned char IpnetToShow[32];
+unsigned char IpnetToShow[64];
 char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
 char* CpuInfoPath = "/proc/stat";
 char* MemInfoPath = "/proc/meminfo";
@@ -110,7 +111,7 @@ void Draw_fillInfo(char *temp,cpu_all* CpuUsAge)
     float usgRate=0.0;
     int usgRateLen =0;
     OledPaint.Show.Str(42,0,temp,16);
-    OledPaint.Draw.Picture(42,8,32,8,IpnetToShow);
+    OledPaint.Draw.Picture(42,8,32,16,IpnetToShow);
     for(int countCpuNum=0;countCpuNum<4;countCpuNum++)
     {
         usgRate = CpuUsAge->cpu[countCpuNum+1].cpu_usageRate/100.0;
@@ -286,6 +287,7 @@ void GetMemUsage()
     fclose(fp);
 }
 
+
 void IpAddressInit()
 {
     FILE *fp;
@@ -296,6 +298,11 @@ void IpAddressInit()
         fgets(buffer,sizeof(buffer),fp);
     }
     fscanf(fp,"%s %s",&buffer,&ipAddress);
+    if(ipAddress[0]!='1'&&ipAddress[1]!='9'&&ipAddress[2]!='2')
+    {
+        sprintf(ipAddress,"Wifi Disonnect now");
+    }
     printf("ip address is:%s\n",ipAddress);
+    IPText_WriteString(IpnetToShow,ipAddress,8);
     pclose(fp);
 }

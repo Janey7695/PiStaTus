@@ -284,6 +284,51 @@ void DisPlay(void){
 	OLED_DrawBMP(0,0,128,8,BMP);
 }
 
+void IPText_WriteChar(unsigned char *text,unsigned char x,unsigned char y,unsigned char CHAR,unsigned char fontsize){
+	unsigned char i,j;
+	j=CHAR-32;
+	if(fontsize==16)
+	{
+		for(i=0;i<8;i++)
+		{
+			text[x+i]=CHAR16x8[j*16+i];
+		}
+		y+=1;
+		for(i=0;i<8;i++)
+		{
+			text[y*32+x+i]=CHAR16x8[j*16+i+8];
+		}
+	}
+	else
+	{
+		for(i=0;i<6;i++)
+		{
+			text[x+i]=CHAR8x6[j][i];
+		}
+	}
+}
+
+void IPText_WriteString(unsigned char *text,unsigned char*chr,unsigned char fontsize){
+	unsigned char j=0,spacing,x=0,y=0;
+	
+	if(fontsize==16) spacing=8;
+	else spacing=6;
+	
+	while(chr[j]!='\0')
+	{
+		IPText_WriteChar(text,x,y,chr[j],fontsize);
+		x+=spacing;
+		j++;
+        if(x>=32)
+        {
+            x=0;
+            y++;
+        }
+        if(y>1)
+            break;
+	}
+}
+
 void Oled_DrawApi_Init()
 {
 	OLED_Init();

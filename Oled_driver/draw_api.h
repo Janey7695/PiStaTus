@@ -51,6 +51,7 @@ void Draw_Picture(unsigned char x,unsigned char y,unsigned char picture_Length,u
 void DisPlay(void);//��ʾ���Ƶ�ͼ��
 void CanvasClear(void);//��ջ���
 void Oled_DrawApi_Init(void);
+void IPText_WriteString(unsigned char *text,unsigned char*chr,unsigned char fontsize);
 
 #endif
 
