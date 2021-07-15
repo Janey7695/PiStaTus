@@ -47,13 +47,13 @@ gpio -v
 ### 从源码获取
 1. 获取`PiStaTus`
 ~~~shell
-cd mnt
+cd /tmp
 git clone https://github.com/Janey7695/PiStaTus.git
 ~~~
 2. 编译`PiStaTus`
 ~~~shell
 cd PiStaTus/
-make
+sudo make
 ~~~
 会有如下输出：
 ~~~shell
@@ -76,7 +76,7 @@ sudo ./PiStatusInit
 * 直接在Release中下载任意版本的`PiStaTus`，并将下载的文件`PiStaTus.tar.gz`解压至`/mnt`目录中
 * 或通过指令获取
 ~~~shell
-cd mnt
+cd /tmp
 sudo wget https://github.com/Janey7695/PiStaTus/releases/download/V_1.0.0/PiStaTus.tar.gz
 sudo tar -zxvf ./PiStaTus.tar.gz
 ~~~
