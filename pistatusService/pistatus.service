@@ -7,7 +7,8 @@ Wants=network.target
 Type=simple
 Restart=on-failure
 RestartSec=5s
-ExecStart=/tmp/PiStaTus/PiStaTus
+ExecStart=/usr/PiStaTus/PiStaTus
+
 
 [Install]
 WantedBy=multi-user.target
