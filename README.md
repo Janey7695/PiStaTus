@@ -33,7 +33,10 @@ CS - > GPIO. 0(BCM编号为17)<br>
 
 ## 使用
 ### 使用前更新
-OLED使用`SPI`通信，依赖`wiringPi  -version 2.52`,树莓派本身自带`wiringPi -version 2.50` 需要升级至2.52版本（<a href="http://wiringpi.com/wiringpi-updated-to-2-52-for-the-raspberry-pi-4b/">详见原作者文章</a>）
+OLED使用`SPI`通信，依赖`wiringPi  -version 2.52`,树莓派本身自带`wiringPi -version 2.50` 需要升级至2.52或更高版本
+更建议使用`WiringPi开源库 v2.60`
+#### 官方库 v2.52
+（<a href="http://wiringpi.com/wiringpi-updated-to-2-52-for-the-raspberry-pi-4b/">详见原作者文章</a>）
 ~~~shell
 cd ~
 wget https://project-downloads.drogon.net/wiringpi-latest.deb
@@ -44,6 +47,20 @@ sudo dpkg -i wiringpi-latest.deb
 gpio -v
 ~~~
 查看版本是否为2.52。
+#### WiringPi开源库 v2.60
+~~~shell
+cd ~
+sudo apt install make gcc
+git clone https://github.com/WiringPi/WiringPi.git
+cd WiringPi
+./build
+~~~
+然后输入
+~~~shell
+gpio -v
+~~~
+查看版本是否为2.60。
+
 ### 从源码获取
 1. 获取`PiStaTus`
 ~~~shell
