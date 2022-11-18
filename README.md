@@ -1,4 +1,5 @@
 # PiStaTus ——Pi资源实时监控
+![license: Apache-2.0 (shields.io)](https://img.shields.io/badge/license-Apache2.0-brightgreen)![version: 1.2.0 (shields.io)](https://img.shields.io/badge/version-1.2.0-brightgreen)
 ## 简介
 显示RPi的CPU温度，IP地址，CPU利用率，内存利用率到连接的OLED屏幕上
 > 支持平台 4B(32位系统/64位系统)
@@ -70,13 +71,13 @@ sudo make
 ~~~
 会有如下输出：
 ~~~shell
-Build dep PiStaTus.o successfully
-Build oled base driver
-Build oled api
-/usr/bin/ld: 当搜索用于 /usr/lib/gcc/aarch64-linux-gnu/8/../../../../lib/libwiringPi.so 时跳过不兼容的 -lwiringPi 
-/usr/bin/ld: 当搜索用于 /lib/../lib/libwiringPi.so 时跳过不兼容的 -lwiringPi 
-/usr/bin/ld: 当搜索用于 /usr/lib/../lib/libwiringPi.so 时跳过不兼容的 -lwiringPi 
-/usr/bin/ld: 当搜索用于 /usr/lib/gcc/aarch64-linux-gnu/8/../../../libwiringPi.so 时跳过不兼容的 -lwiringPi 
+Build main - PiStaTus 
+Build oled - base driver
+Build oled - api
+Build utils - getTemperature 
+Build utils - getNetstatus 
+Build utils - getMemoryInfo 
+Build utils - getCpuUsage 
 Build PiStaTus successfully
 ~~~
 3. `PiStaTus`初始化
@@ -84,3 +85,7 @@ Build PiStaTus successfully
 sh INSTALL.sh
 ~~~
 初始化会设置`PiStaTus`为开机自启动，执行完这步后oled屏幕应该就有显示东西了，`PiStaTus`安装完成。
+
+### Todo
+ - 使用类任务管理系统的方式管理任务，而不是以状态机的思维进行
+ - 绘制更优美平滑的折线图
