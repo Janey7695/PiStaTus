@@ -16,7 +16,7 @@ void findDevice(const char* device,FILE *fp){
     while(buffer2[0]!=device[0]){
         fgets(buffer,sizeof(buffer),fp);
         fscanf(fp,"%s %s",buffer,buffer2);
-        printf("%s \r\n",buffer2);
+       // printf("%s \r\n",buffer2);
     }
 }
 
