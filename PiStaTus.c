@@ -26,20 +26,20 @@
 #define MemLineChartBegin_x 85
 #define MemLineChartBegin_y 0
 
-typedef struct cpu_n
-{
-    char cpuname[5];
-    int cpu_pri_usagetime[7];
-    int cpu_pri_usagetimeAll;
-    int cpu_atf_usagetime[7];
-    int cpu_aft_usagetimeAll;
-    int cpu_usageRate;
-}cpu_usage;
+// typedef struct cpu_n
+// {
+//     char cpuname[5];
+//     int cpu_pri_usagetime[7];
+//     int cpu_pri_usagetimeAll;
+//     int cpu_atf_usagetime[7];
+//     int cpu_aft_usagetimeAll;
+//     int cpu_usageRate;
+// }cpu_usage;
 
-typedef struct cpu_a
-{
-    cpu_usage cpu[5];
-}cpu_all;
+// typedef struct cpu_a
+// {
+//     cpu_usage cpu[5];
+// }cpu_all;
 
 // typedef struct mem_a
 // {
@@ -51,8 +51,8 @@ typedef struct cpu_a
 //     char trash[100];
 // }mem_all;
 
-cpu_usage cpu_1,cpu_2,cpu_3,cpu_4,cpu_Al;
-cpu_all CpuUsage;
+// cpu_usage cpu_1,cpu_2,cpu_3,cpu_4,cpu_Al;
+// cpu_all CpuUsage;
 // mem_all MemUsage;
 char* temp;
 char cpuAllUsageLineChartDat[LineChartLength];
@@ -60,11 +60,12 @@ char memAllUsageLineChartDat[MemLineChartLength];
 unsigned char IpnetText[120*2];
 unsigned char IpnetToShow[64];
 int jindutiao = 0;
+unsigned int lastTimeUpdateTempAndIp = 0;
 
-char* CpuInfoPath = "/proc/stat";
+// char* CpuInfoPath = "/proc/stat";
 // char* MemInfoPath = "/proc/meminfo";
 
-void GetCpuUasge(void);
+//void GetCpuUasge(void);
 //void GetMemUsage(void);
 void IpAddressInit(void);
 
@@ -81,11 +82,11 @@ void Draw_UI()
     }
 }
 
-void updateLineCHartDat(cpu_all* CpuUsAge)
+void updateLineCHartDat(int CpuAverageUsage)
 {
     float usgRate=0.0;
     int usgRateLen =0;
-    usgRate = CpuUsAge->cpu[0].cpu_usageRate/100.0;
+    usgRate = CpuAverageUsage/100.0;
     for(int count =0;count<LineChartLength-1;count++)
     {
         cpuAllUsageLineChartDat[count] = cpuAllUsageLineChartDat[count+1];
@@ -105,24 +106,31 @@ void updateMemLineCHartDat(int MemUsage)
     memAllUsageLineChartDat[MemLineChartLength-1] = usgRate*MemLineChartWidth;
 }
 
-void Draw_fillInfo(char *temp,cpu_all* CpuUsAge)
+void Draw_fillInfo()
 {
     float usgRate=0.0;
     int usgRateLen =0;
     
-    OledPaint.Show.Str(42,0,temp,16);
-    Draw_PicPart(jindutiao,IpnetToShow,IpnetText);
-    jindutiao+=8;
-    if(jindutiao>=120)
-    jindutiao=0;
-    OledPaint.Draw.Picture(42,16,32,16,IpnetToShow);
+    if(millis() - lastTimeUpdateTempAndIp >= 200){
+        OledPaint.Show.Str(42,0,temp,16);
+
+        IPText_WriteString(IpnetText,getIp(),16);
+        Draw_PicPart(jindutiao,IpnetToShow,IpnetText);
+        jindutiao+=8;
+        if(jindutiao>=120)
+        jindutiao=0;
+        OledPaint.Draw.Picture(42,16,32,16,IpnetToShow);
+        lastTimeUpdateTempAndIp = millis();
+    }
+    
+
     for(int countCpuNum=0;countCpuNum<4;countCpuNum++)
     {
-        usgRate = CpuUsAge->cpu[countCpuNum+1].cpu_usageRate/100.0;
+        usgRate = getCpuXUsage(countCpuNum)/100.0;
         usgRateLen = usgRate * UsageRectLength;
         OledPaint.Draw.Rect(UsageRectBeigin_x,UsageRectBeigin_y+(UsageRectWidth+UsageRectInter)*countCpuNum,UsageRectBeigin_x+ usgRateLen,UsageRectWidth+UsageRectBeigin_y+(UsageRectWidth+UsageRectInter)*countCpuNum,1);
     }
-    updateLineCHartDat(&CpuUsage);
+    updateLineCHartDat(getCpuAverageUsage());
     for(int countPointNumb =0;countPointNumb<LineChartLength-1;countPointNumb++)
     {
         OledPaint.Draw.Line(countPointNumb+LineChartBegin_x,LineChartBegin_y+LineChartWidth-cpuAllUsageLineChartDat[countPointNumb],countPointNumb+LineChartBegin_x+1,LineChartBegin_y+LineChartWidth-cpuAllUsageLineChartDat[countPointNumb+1]);
@@ -149,11 +157,11 @@ int main()
     }
     Oled_DrawApi_Init();
     IpAddressInit();
-    CpuUsage.cpu[1] = cpu_1;
-    CpuUsage.cpu[2] = cpu_2;
-    CpuUsage.cpu[3] = cpu_3;
-    CpuUsage.cpu[4] = cpu_4;
-    CpuUsage.cpu[0] = cpu_Al;
+    // CpuUsage.cpu[1] = cpu_1;
+    // CpuUsage.cpu[2] = cpu_2;
+    // CpuUsage.cpu[3] = cpu_3;
+    // CpuUsage.cpu[4] = cpu_4;
+    // CpuUsage.cpu[0] = cpu_Al;
     //memset(&MemUsage,0,sizeof(MemUsage));
     memset(&cpuAllUsageLineChartDat,0,sizeof(cpuAllUsageLineChartDat));
     memset(&memAllUsageLineChartDat,0,sizeof(memAllUsageLineChartDat));
@@ -161,88 +169,89 @@ int main()
     {
         
         CanvasClear();
-	    IpAddressInit();
+	   // IpAddressInit();
         Draw_UI();
         temp = getTemp();
-        GetCpuUasge();
+        //GetCpuUasge();
         //GetMemUsage();
-        Draw_fillInfo(temp,&CpuUsage);
+        calculateCpuUasge(200);
+        Draw_fillInfo();
         DisPlay();
-        delay(300);
+        delay(1000/20);
         printf("ok\n");
     }
 }
 
 
-void GetInfoFromFile(int Ifpri)
-{
-    FILE *fp;
-    char buffer[100];
-    fp = fopen(CpuInfoPath,"r");
-    if(fp == NULL)
-    {
-        printf("Open Cpu info file fail\n");
-        exit(1);
-    }
-    else
-    {
-        printf("Open Cpu info file succ\n");
-        if(Ifpri)
-        {
-            for(int countCpuNum=0;countCpuNum<5;countCpuNum++)
-            {
-                fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu[countCpuNum].cpuname,&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[0],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[1],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[2],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[4],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[5],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[6]);
-                printf("%d %d %d %d %d %d %d\n",CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[0],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[1],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[2],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[4],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[5],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[6]);
-                fgets(buffer,sizeof(buffer),fp);
-            }
-            printf("read all pri_cpuinfo .. \n");
-        }
-        else
-        {
-            for(int countCpuNum=0;countCpuNum<5;countCpuNum++)
-            {
-                fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu[countCpuNum].cpuname,&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[0],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[1],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[2],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[4],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[5],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[6]);
-                printf("%d %d %d %d %d %d %d\n",CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[0],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[1],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[2],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[4],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[5],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[6]);
-                fgets(buffer,sizeof(buffer),fp);
-            }
-            printf("read all aft_cpuinfo ..\n");
-        }
-    }
-    fclose(fp);
-}
+// void GetInfoFromFile(int Ifpri)
+// {
+//     FILE *fp;
+//     char buffer[100];
+//     fp = fopen(CpuInfoPath,"r");
+//     if(fp == NULL)
+//     {
+//         printf("Open Cpu info file fail\n");
+//         exit(1);
+//     }
+//     else
+//     {
+//         printf("Open Cpu info file succ\n");
+//         if(Ifpri)
+//         {
+//             for(int countCpuNum=0;countCpuNum<5;countCpuNum++)
+//             {
+//                 fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu[countCpuNum].cpuname,&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[0],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[1],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[2],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[4],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[5],&CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[6]);
+//                 printf("%d %d %d %d %d %d %d\n",CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[0],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[1],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[2],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[4],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[5],CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[6]);
+//                 fgets(buffer,sizeof(buffer),fp);
+//             }
+//             printf("read all pri_cpuinfo .. \n");
+//         }
+//         else
+//         {
+//             for(int countCpuNum=0;countCpuNum<5;countCpuNum++)
+//             {
+//                 fscanf(fp,"%s %d %d %d %d %d %d %d",&CpuUsage.cpu[countCpuNum].cpuname,&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[0],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[1],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[2],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[4],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[5],&CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[6]);
+//                 printf("%d %d %d %d %d %d %d\n",CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[0],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[1],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[2],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[4],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[5],CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[6]);
+//                 fgets(buffer,sizeof(buffer),fp);
+//             }
+//             printf("read all aft_cpuinfo ..\n");
+//         }
+//     }
+//     fclose(fp);
+// }
 
-void GetCpuUasge()
-{
-    int count=0;
-    int countCpuNum =0;
-    printf("begin to clear cpuinfo\n");
-    memset(&cpu_1,0,sizeof(cpu_1));
-    memset(&cpu_2,0,sizeof(cpu_2));
-    memset(&cpu_3,0,sizeof(cpu_3));
-    memset(&cpu_4,0,sizeof(cpu_4));
-    memset(&cpu_Al,0,sizeof(cpu_Al));
-    GetInfoFromFile(PriTest);
-    delay(100);
-    GetInfoFromFile(AftTest);
-    for(countCpuNum=0;countCpuNum<5;countCpuNum++)
-    {
-        for(count=0;count<=6;count++)
-        {
-            CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll = CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll + CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[count];
-            CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll = CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll + CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[count];
+// void GetCpuUasge()
+// {
+//     int count=0;
+//     int countCpuNum =0;
+//     printf("begin to clear cpuinfo\n");
+//     memset(&cpu_1,0,sizeof(cpu_1));
+//     memset(&cpu_2,0,sizeof(cpu_2));
+//     memset(&cpu_3,0,sizeof(cpu_3));
+//     memset(&cpu_4,0,sizeof(cpu_4));
+//     memset(&cpu_Al,0,sizeof(cpu_Al));
+//     GetInfoFromFile(PriTest);
+//     delay(100);
+//     GetInfoFromFile(AftTest);
+//     for(countCpuNum=0;countCpuNum<5;countCpuNum++)
+//     {
+//         for(count=0;count<=6;count++)
+//         {
+//             CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll = CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll + CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[count];
+//             CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll = CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll + CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[count];
 
-        }
-        CpuUsage.cpu[countCpuNum].cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3]-CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3])/(CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll - CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll));
-        CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll = 0;
-        CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll = 0;
+//         }
+//         CpuUsage.cpu[countCpuNum].cpu_usageRate = 100 - (100*1.0*(CpuUsage.cpu[countCpuNum].cpu_atf_usagetime[3]-CpuUsage.cpu[countCpuNum].cpu_pri_usagetime[3])/(CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll - CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll));
+//         CpuUsage.cpu[countCpuNum].cpu_pri_usagetimeAll = 0;
+//         CpuUsage.cpu[countCpuNum].cpu_aft_usagetimeAll = 0;
         
         
-    }
+//     }
 
 
-    printf("cpu:%d cpu1:%d cpu2:%d cpu3:%d cpu4:%d \n",CpuUsage.cpu[0].cpu_usageRate,CpuUsage.cpu[1].cpu_usageRate,CpuUsage.cpu[2].cpu_usageRate,CpuUsage.cpu[3].cpu_usageRate,CpuUsage.cpu[4].cpu_usageRate);
+//     printf("cpu:%d cpu1:%d cpu2:%d cpu3:%d cpu4:%d \n",CpuUsage.cpu[0].cpu_usageRate,CpuUsage.cpu[1].cpu_usageRate,CpuUsage.cpu[2].cpu_usageRate,CpuUsage.cpu[3].cpu_usageRate,CpuUsage.cpu[4].cpu_usageRate);
 
-}
+// }
 
 // void GetMemUsage()
 // {
