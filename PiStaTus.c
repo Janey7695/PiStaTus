@@ -1,6 +1,7 @@
 #include "./Oled_driver/oled.h"
 #include "./Oled_driver/draw_api.h"
 #include "./Oled_driver/img.h"
+#include "./utils/utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -53,18 +54,18 @@ typedef struct mem_a
 cpu_usage cpu_1,cpu_2,cpu_3,cpu_4,cpu_Al;
 cpu_all CpuUsage;
 mem_all MemUsage;
-char temp[4];
+char* temp;
 char cpuAllUsageLineChartDat[LineChartLength];
 char memAllUsageLineChartDat[MemLineChartLength];
 unsigned char IpnetText[120*2];
 unsigned char IpnetToShow[64];
 int jindutiao = 0;
-char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
+//char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
 char* CpuInfoPath = "/proc/stat";
 char* MemInfoPath = "/proc/meminfo";
 char* IpCmd = "ip a";
 
-void GetTemp(void);
+//void GetTemp(void);
 void GetCpuUasge(void);
 void GetMemUsage(void);
 void IpAddressInit(void);
@@ -162,9 +163,9 @@ int main()
     {
         
         CanvasClear();
-	IpAddressInit();
+	    IpAddressInit();
         Draw_UI();
-        GetTemp();
+        temp = getTemp();
         GetCpuUasge();
         GetMemUsage();
         Draw_fillInfo(temp,&CpuUsage);
@@ -174,27 +175,27 @@ int main()
     }
 }
 
-void GetTemp(void)
-{
-    FILE *fp;
-    char buffer[20];
-    fp = popen(TempFilePathCmd,"r");
-    if(fp!=NULL)
-    {
-        float temp2;
-        int temp1;
-        fgets(buffer,sizeof(buffer),fp);
-        temp1 = atoi(buffer);
-        temp2 = temp1/1000.0;
-        sprintf(temp,"%.1f",temp2);
-        printf("now tempture is %s 'C\n",temp);
-    }
-    else
-    {
-        printf("read tempture fail\n");
-    }
-    pclose(fp);
-}
+// void GetTemp(void)
+// {
+//     FILE *fp;
+//     char buffer[20];
+//     fp = popen(TempFilePathCmd,"r");
+//     if(fp!=NULL)
+//     {
+//         float temp2;
+//         int temp1;
+//         fgets(buffer,sizeof(buffer),fp);
+//         temp1 = atoi(buffer);
+//         temp2 = temp1/1000.0;
+//         sprintf(temp,"%.1f",temp2);
+//         printf("now tempture is %s 'C\n",temp);
+//     }
+//     else
+//     {
+//         printf("read tempture fail\n");
+//     }
+//     pclose(fp);
+// }
 
 void GetInfoFromFile(int Ifpri)
 {
