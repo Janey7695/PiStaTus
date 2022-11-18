@@ -41,35 +41,33 @@ typedef struct cpu_a
     cpu_usage cpu[5];
 }cpu_all;
 
-typedef struct mem_a
-{
-    int mem_total;
-    int mem_free;
-    int mem_buffer;
-    int mem_cached;
-    int mem_usage;
-    char trash[100];
-}mem_all;
+// typedef struct mem_a
+// {
+//     int mem_total;
+//     int mem_free;
+//     int mem_buffer;
+//     int mem_cached;
+//     int mem_usage;
+//     char trash[100];
+// }mem_all;
 
 cpu_usage cpu_1,cpu_2,cpu_3,cpu_4,cpu_Al;
 cpu_all CpuUsage;
-mem_all MemUsage;
+// mem_all MemUsage;
 char* temp;
 char cpuAllUsageLineChartDat[LineChartLength];
 char memAllUsageLineChartDat[MemLineChartLength];
 unsigned char IpnetText[120*2];
 unsigned char IpnetToShow[64];
 int jindutiao = 0;
-//char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
-char* CpuInfoPath = "/proc/stat";
-char* MemInfoPath = "/proc/meminfo";
-//char* IpCmd = "ip a";
 
-//void GetTemp(void);
+char* CpuInfoPath = "/proc/stat";
+// char* MemInfoPath = "/proc/meminfo";
+
 void GetCpuUasge(void);
-void GetMemUsage(void);
+//void GetMemUsage(void);
 void IpAddressInit(void);
-void GetIpAddress(void);
+
 
 
 void Draw_UI()
@@ -95,11 +93,11 @@ void updateLineCHartDat(cpu_all* CpuUsAge)
     cpuAllUsageLineChartDat[LineChartLength-1] = usgRate*LineChartWidth;
 }
 
-void updateMemLineCHartDat(mem_all* MemUsAge)
+void updateMemLineCHartDat(int MemUsage)
 {
     float usgRate=0.0;
     int usgRateLen =0;
-    usgRate = MemUsAge->mem_usage/100.0;
+    usgRate = MemUsage/100.0;
     for(int count =0;count<MemLineChartLength-1;count++)
     {
         memAllUsageLineChartDat[count] = memAllUsageLineChartDat[count+1];
@@ -129,7 +127,7 @@ void Draw_fillInfo(char *temp,cpu_all* CpuUsAge)
     {
         OledPaint.Draw.Line(countPointNumb+LineChartBegin_x,LineChartBegin_y+LineChartWidth-cpuAllUsageLineChartDat[countPointNumb],countPointNumb+LineChartBegin_x+1,LineChartBegin_y+LineChartWidth-cpuAllUsageLineChartDat[countPointNumb+1]);
     }
-    updateMemLineCHartDat(&MemUsage);
+    updateMemLineCHartDat(getMemUsage());
     for(int countPointNumb =0;countPointNumb<LineChartLength-1;countPointNumb++)
     {
         OledPaint.Draw.Line(countPointNumb+MemLineChartBegin_x,MemLineChartBegin_y+MemLineChartWidth-memAllUsageLineChartDat[countPointNumb],countPointNumb+MemLineChartBegin_x+1,MemLineChartBegin_y+MemLineChartWidth-memAllUsageLineChartDat[countPointNumb+1]);
@@ -156,7 +154,7 @@ int main()
     CpuUsage.cpu[3] = cpu_3;
     CpuUsage.cpu[4] = cpu_4;
     CpuUsage.cpu[0] = cpu_Al;
-    memset(&MemUsage,0,sizeof(MemUsage));
+    //memset(&MemUsage,0,sizeof(MemUsage));
     memset(&cpuAllUsageLineChartDat,0,sizeof(cpuAllUsageLineChartDat));
     memset(&memAllUsageLineChartDat,0,sizeof(memAllUsageLineChartDat));
     while(1)
@@ -167,7 +165,7 @@ int main()
         Draw_UI();
         temp = getTemp();
         GetCpuUasge();
-        GetMemUsage();
+        //GetMemUsage();
         Draw_fillInfo(temp,&CpuUsage);
         DisPlay();
         delay(300);
@@ -175,27 +173,6 @@ int main()
     }
 }
 
-// void GetTemp(void)
-// {
-//     FILE *fp;
-//     char buffer[20];
-//     fp = popen(TempFilePathCmd,"r");
-//     if(fp!=NULL)
-//     {
-//         float temp2;
-//         int temp1;
-//         fgets(buffer,sizeof(buffer),fp);
-//         temp1 = atoi(buffer);
-//         temp2 = temp1/1000.0;
-//         sprintf(temp,"%.1f",temp2);
-//         printf("now tempture is %s 'C\n",temp);
-//     }
-//     else
-//     {
-//         printf("read tempture fail\n");
-//     }
-//     pclose(fp);
-// }
 
 void GetInfoFromFile(int Ifpri)
 {
@@ -267,49 +244,37 @@ void GetCpuUasge()
 
 }
 
-void GetMemUsage()
-{
-    FILE *fp;
-    char buffer[100];
-    fp = fopen(MemInfoPath,"r");
-    if(fp == NULL)
-    {
-        printf("Open Mem info file fail\n");
-        exit(1);
-    }
-    else
-    {
+// void GetMemUsage()
+// {
+//     FILE *fp;
+//     char buffer[100];
+//     fp = fopen(MemInfoPath,"r");
+//     if(fp == NULL)
+//     {
+//         printf("Open Mem info file fail\n");
+//         exit(1);
+//     }
+//     else
+//     {
 
-        printf("Open Cpu info file succ\n");
-        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_total,&MemUsage.trash);
-        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_free,&MemUsage.trash);
-        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_buffer,&MemUsage.trash);
-        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_buffer,&MemUsage.trash);
-        fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_cached,&MemUsage.trash);
-        MemUsage.mem_usage = 100 - (100*1.0*(MemUsage.mem_free+MemUsage.mem_buffer+MemUsage.mem_cached)/MemUsage.mem_total);
-        printf("total:%d free:%d buffers:%d cached:%d usagerate:%d\n",MemUsage.mem_total,MemUsage.mem_free,MemUsage.mem_buffer,MemUsage.mem_cached,MemUsage.mem_usage);
+//         printf("Open Cpu info file succ\n");
+//         fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_total,&MemUsage.trash);
+//         fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_free,&MemUsage.trash);
+//         fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_buffer,&MemUsage.trash);
+//         fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_buffer,&MemUsage.trash);
+//         fscanf(fp,"%s %d %s",&MemUsage.trash,&MemUsage.mem_cached,&MemUsage.trash);
+//         MemUsage.mem_usage = 100 - (100*1.0*(MemUsage.mem_free+MemUsage.mem_buffer+MemUsage.mem_cached)/MemUsage.mem_total);
+//         printf("total:%d free:%d buffers:%d cached:%d usagerate:%d\n",MemUsage.mem_total,MemUsage.mem_free,MemUsage.mem_buffer,MemUsage.mem_cached,MemUsage.mem_usage);
 
-    }
+//     }
 
-    fclose(fp);
-}
+//     fclose(fp);
+// }
 
 
 void IpAddressInit()
 {
-    // FILE *fp;
-    // char buffer[200],ipAddress[20];
-    // fp = popen(IpCmd,"r");
-    // for(int i=0;i<10;i++)
-    // {
-    //     fgets(buffer,sizeof(buffer),fp);
-    // }
-    // fscanf(fp,"%s %s",&buffer,&ipAddress);
-    // if(ipAddress[0]!='1'&&ipAddress[1]!='9'&&ipAddress[2]!='2')
-    // {
-    //     sprintf(ipAddress,"Wifi Disonnect now");
-    // }
-    // printf("ip address is:%s\n",ipAddress);
+
     IPText_WriteString(IpnetText,getIp(),16);
-    // pclose(fp);
+
 }

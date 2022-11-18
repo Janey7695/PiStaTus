@@ -6,6 +6,7 @@
         "*.wxs": "javascript",
         "draw_api.h": "c",
         "stdlib.h": "c",
-        "gettemperature.h": "c"
+        "gettemperature.h": "c",
+        "getmemoryinfo.h": "c"
     }
 }

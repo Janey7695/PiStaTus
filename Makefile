@@ -1,5 +1,5 @@
-PiStaTus:PiStaTus.o oled.o draw_api.o getTemperature.o getNetstatus.o
-	@gcc -o PiStaTus PiStaTus.o oled.o draw_api.o getTemperature.o getNetstatus.o -lwiringPi -lm
+PiStaTus:PiStaTus.o oled.o draw_api.o getTemperature.o getNetstatus.o getMemoryInfo.o
+	@gcc -o PiStaTus PiStaTus.o oled.o draw_api.o getTemperature.o getNetstatus.o getMemoryInfo.o -lwiringPi -lm
 	@echo "Build PiStaTus successfully"
 PiStaTus.o:PiStaTus.c
 	@gcc -c PiStaTus.c
@@ -18,6 +18,10 @@ getTemperature.o:./utils/getTemperature.c
 getNetstatus.o:./utils/getNetstatus.c
 	@gcc -c ./utils/getNetstatus.c
 	@echo "Build utils - getNetstatus "
+
+getMemoryInfo.o:./utils/getMemoryInfo.c
+	@gcc -c ./utils/getMemoryInfo.c
+	@echo "Build utils - getMemoryInfo "
 
 clean:
 	rm -f *.o PiStaTus
