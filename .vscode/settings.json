@@ -5,6 +5,10 @@
         "*.wxss": "css",
         "*.wxs": "javascript",
         "draw_api.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "gettemperature.h": "c",
+        "getmemoryinfo.h": "c",
+        "stdio.h": "c",
+        "wiringpi.h": "c"
     }
 }
