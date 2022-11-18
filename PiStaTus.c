@@ -63,7 +63,7 @@ int jindutiao = 0;
 //char* TempFilePathCmd = "cat /sys/class/thermal/thermal_zone0/temp";
 char* CpuInfoPath = "/proc/stat";
 char* MemInfoPath = "/proc/meminfo";
-char* IpCmd = "ip a";
+//char* IpCmd = "ip a";
 
 //void GetTemp(void);
 void GetCpuUasge(void);
@@ -297,19 +297,19 @@ void GetMemUsage()
 
 void IpAddressInit()
 {
-    FILE *fp;
-    char buffer[200],ipAddress[20];
-    fp = popen(IpCmd,"r");
-    for(int i=0;i<10;i++)
-    {
-        fgets(buffer,sizeof(buffer),fp);
-    }
-    fscanf(fp,"%s %s",&buffer,&ipAddress);
-    if(ipAddress[0]!='1'&&ipAddress[1]!='9'&&ipAddress[2]!='2')
-    {
-        sprintf(ipAddress,"Wifi Disonnect now");
-    }
-    printf("ip address is:%s\n",ipAddress);
-    IPText_WriteString(IpnetText,ipAddress,16);
-    pclose(fp);
+    // FILE *fp;
+    // char buffer[200],ipAddress[20];
+    // fp = popen(IpCmd,"r");
+    // for(int i=0;i<10;i++)
+    // {
+    //     fgets(buffer,sizeof(buffer),fp);
+    // }
+    // fscanf(fp,"%s %s",&buffer,&ipAddress);
+    // if(ipAddress[0]!='1'&&ipAddress[1]!='9'&&ipAddress[2]!='2')
+    // {
+    //     sprintf(ipAddress,"Wifi Disonnect now");
+    // }
+    // printf("ip address is:%s\n",ipAddress);
+    IPText_WriteString(IpnetText,getIp(),16);
+    // pclose(fp);
 }

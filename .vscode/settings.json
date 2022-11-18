@@ -5,6 +5,7 @@
         "*.wxss": "css",
         "*.wxs": "javascript",
         "draw_api.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "gettemperature.h": "c"
     }
 }
